@@ -82,9 +82,7 @@ $code_id = sprintf("#EM-%03d", $id);
     <header class="navbar">
         <div class="navbar-container">
             <a href="index.php" class="brand">
-                <div class="brand-icon">
-                    <i class="fa-solid fa-heart-pulse"></i>
-                </div>
+                <img src="assets/images/logo-simrs.svg" alt="Logo SIM RS" class="brand-logo-img">
                 <div class="brand-text">
                     <h1>SIM RS Elektromedis <span class="brand-tag">v2.0</span></h1>
                     <span>Sistem Manajemen & Inventarisasi Alat Medis</span>
@@ -92,7 +90,7 @@ $code_id = sprintf("#EM-%03d", $id);
             </a>
             <div class="navbar-user-group">
                 <span class="user-badge" title="Petugas yang Sedang Login">
-                    <i class="fa-solid fa-circle-user"></i>
+                    <img src="elegant/img/avatar/avatar-illustrated-02.png" alt="Avatar Petugas" class="user-avatar-img">
                     <?php echo htmlspecialchars($nama_petugas); ?>
                 </span>
                 <a href="index.php" class="btn btn-secondary btn-sm">
@@ -225,9 +223,12 @@ $code_id = sprintf("#EM-%03d", $id);
                 <div class="preview-sticky">
                     <div class="asset-tag-card">
                         <div class="asset-tag-header">
-                            <div>
-                                <div class="asset-tag-title">SIM RS &bull; Asset Tag Preview</div>
-                                <div class="asset-tag-code"><?php echo $code_id; ?></div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <img src="assets/images/logo-simrs.svg" alt="Logo SIM RS" style="width: 34px; height: 34px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));">
+                                <div>
+                                    <div class="asset-tag-title">SIM RS &bull; Asset Tag Preview</div>
+                                    <div class="asset-tag-code"><?php echo $code_id; ?></div>
+                                </div>
                             </div>
                             <div class="asset-qr-mock" title="Barcode Digital Asset RS">
                                 <i class="fa-solid fa-qrcode"></i>

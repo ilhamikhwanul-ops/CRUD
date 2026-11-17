@@ -94,9 +94,7 @@ if (isset($_POST['register'])) {
             <!-- Left Hero Showcase Side -->
             <div class="auth-hero-side">
                 <div class="auth-hero-brand">
-                    <div class="brand-icon">
-                        <i class="fa-solid fa-heart-pulse"></i>
-                    </div>
+                    <img src="assets/images/logo-simrs.svg" alt="Logo SIM RS" style="width: 44px; height: 44px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));">
                     <h3>SIM RS Elektromedis</h3>
                 </div>
 
@@ -105,6 +103,9 @@ if (isset($_POST['register'])) {
                     <p>
                         Daftarkan akun operator teknisi atau staf elektromedis untuk mengelola data peralatan dan instalasi rumah sakit secara resmi.
                     </p>
+
+                    <!-- Smart Medical Hub Illustration -->
+                    <img src="assets/images/auth-medical.svg" alt="Smart Hospital Biomedical Station" class="auth-hero-illustration">
 
                     <ul class="auth-feature-list">
                         <li>

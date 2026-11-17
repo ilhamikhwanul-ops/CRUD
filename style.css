@@ -124,6 +124,17 @@ body::before {
     transform: translateY(-1px);
 }
 
+.brand-logo-img {
+    width: 46px;
+    height: 46px;
+    filter: drop-shadow(0 6px 14px rgba(37, 99, 235, 0.35));
+    transition: var(--transition);
+}
+
+.brand-logo-img:hover {
+    transform: scale(1.06) rotate(3deg);
+}
+
 .brand-icon {
     width: 44px;
     height: 44px;
@@ -185,14 +196,24 @@ body::before {
 .user-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     background: #f8fafc;
-    padding: 6px 14px;
+    padding: 5px 14px 5px 6px;
     border-radius: var(--radius-full);
     font-size: 0.85rem;
     font-weight: 600;
     color: #334155;
     border: 1px solid var(--border-color);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.user-avatar-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #3b82f6;
+    background: #eff6ff;
 }
 
 .user-badge i {
@@ -278,6 +299,35 @@ body::before {
     display: flex;
     align-items: center;
     gap: 12px;
+}
+
+.hero-visual {
+    flex-shrink: 0;
+    max-width: 290px;
+    width: 100%;
+    filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.45));
+    animation: floatVisual 4.5s ease-in-out infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes floatVisual {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.auth-hero-illustration {
+    width: 100%;
+    max-width: 280px;
+    margin: 20px auto 10px;
+    display: block;
+    filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.4));
+    animation: floatVisual 5s ease-in-out infinite;
 }
 
 /* Statistics Grid */

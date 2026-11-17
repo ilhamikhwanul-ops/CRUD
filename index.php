@@ -28,6 +28,22 @@ $lokasi_list_query = mysqli_query($mysqli, "SELECT DISTINCT lokasi FROM alat WHE
 
 // Nama Petugas
 $nama_petugas = !empty($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : $_SESSION['username'];
+
+// Fungsi Helper Ikon Khusus Peralatan Elektromedik
+function getDeviceIcon($nama) {
+    $nama = strtolower($nama);
+    if (strpos($nama, 'usg') !== false) return 'fa-solid fa-radiation';
+    if (strpos($nama, 'ekg') !== false || strpos($nama, 'ecg') !== false) return 'fa-solid fa-heart-pulse';
+    if (strpos($nama, 'defibrillator') !== false) return 'fa-solid fa-bolt';
+    if (strpos($nama, 'ventilator') !== false) return 'fa-solid fa-lungs';
+    if (strpos($nama, 'x-ray') !== false || strpos($nama, 'rontgen') !== false) return 'fa-solid fa-bone';
+    if (strpos($nama, 'suction') !== false) return 'fa-solid fa-pump-medical';
+    if (strpos($nama, 'syringe') !== false || strpos($nama, 'infus') !== false) return 'fa-solid fa-syringe';
+    if (strpos($nama, 'incubator') !== false || strpos($nama, 'inkubator') !== false) return 'fa-solid fa-baby';
+    if (strpos($nama, 'steril') !== false || strpos($nama, 'autoclave') !== false) return 'fa-solid fa-soap';
+    if (strpos($nama, 'laboratorium') !== false || strpos($nama, 'mikroskop') !== false) return 'fa-solid fa-microscope';
+    return 'fa-solid fa-kit-medical';
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -46,9 +62,7 @@ $nama_petugas = !empty($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 
     <header class="navbar">
         <div class="navbar-container">
             <a href="index.php" class="brand">
-                <div class="brand-icon">
-                    <i class="fa-solid fa-heart-pulse"></i>
-                </div>
+                <img src="assets/images/logo-simrs.svg" alt="Logo SIM RS" class="brand-logo-img">
                 <div class="brand-text">
                     <h1>SIM RS Elektromedis <span class="brand-tag">v2.0</span></h1>
                     <span>Sistem Manajemen & Inventarisasi Alat Medis</span>
@@ -57,7 +71,7 @@ $nama_petugas = !empty($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 
             
             <div class="navbar-user-group">
                 <span class="user-badge" title="Petugas yang Sedang Login">
-                    <i class="fa-solid fa-circle-user"></i>
+                    <img src="elegant/img/avatar/avatar-illustrated-02.png" alt="Avatar Petugas" class="user-avatar-img">
                     <?php echo htmlspecialchars($nama_petugas); ?>
                 </span>
                 <a href="add.php" class="btn btn-primary btn-sm">
@@ -75,7 +89,7 @@ $nama_petugas = !empty($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 
         
         <!-- Hero Welcome Banner -->
         <div class="hero-banner">
-            <div class="hero-content">
+            <div class="hero-content" style="flex: 1; min-width: 300px;">
                 <h2>
                     Halo, <?php echo htmlspecialchars($nama_petugas); ?> 👋
                 </h2>
@@ -96,15 +110,20 @@ $nama_petugas = !empty($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 
                         <span>SIM RS Unit Elektromedik</span>
                     </div>
                 </div>
+
+                <div class="hero-actions" style="margin-top: 24px;">
+                    <a href="add.php" class="btn btn-primary">
+                        <i class="fa-solid fa-circle-plus"></i> Tambah Alat Baru
+                    </a>
+                    <button onclick="window.print()" class="btn btn-secondary">
+                        <i class="fa-solid fa-print"></i> Cetak Laporan
+                    </button>
+                </div>
             </div>
 
-            <div class="hero-actions">
-                <a href="add.php" class="btn btn-primary">
-                    <i class="fa-solid fa-circle-plus"></i> Tambah Alat Baru
-                </a>
-                <button onclick="window.print()" class="btn btn-secondary">
-                    <i class="fa-solid fa-print"></i> Cetak Laporan
-                </button>
+            <!-- Hero Medical Tech Illustration -->
+            <div class="hero-visual">
+                <img src="assets/images/hero-medical.svg" alt="Medical Monitor Dashboard Illustration" style="width: 100%; height: auto;">
             </div>
         </div>
 
@@ -235,7 +254,7 @@ $nama_petugas = !empty($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 
                                     <td>
                                         <div class="device-name-cell">
                                             <div class="device-avatar">
-                                                <i class="fa-solid fa-kit-medical"></i>
+                                                <i class="<?php echo getDeviceIcon($user_data['nama_alat']); ?>"></i>
                                             </div>
                                             <div>
                                                 <div class="device-title-bold">
