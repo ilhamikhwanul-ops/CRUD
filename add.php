@@ -32,7 +32,7 @@ if (isset($_POST['Submit'])) {
 
         if (mysqli_stmt_execute($stmt)) {
             $message_type = 'success';
-            $message = 'Data alat <strong>' . htmlspecialchars($nama_alat) . '</strong> berhasil ditambahkan! <a href="index.php">Lihat Semua Alat &rarr;</a>';
+            $message = 'Data alat <strong>' . htmlspecialchars($nama_alat) . '</strong> berhasil didaftarkan ke inventaris! <a href="index.php">Lihat Semua Alat &rarr;</a>';
         } else {
             $message_type = 'danger';
             $message = 'Gagal menambahkan data: ' . htmlspecialchars(mysqli_error($mysqli));
@@ -44,6 +44,8 @@ if (isset($_POST['Submit'])) {
         $message = 'Terjadi kesalahan sistem dalam penyiapan query: ' . htmlspecialchars(mysqli_error($mysqli));
     }
 }
+
+$nama_petugas = !empty($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : $_SESSION['username'];
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -66,19 +68,19 @@ if (isset($_POST['Submit'])) {
                     <i class="fa-solid fa-heart-pulse"></i>
                 </div>
                 <div class="brand-text">
-                    <h1>SIM RS Elektromedis</h1>
-                    <span>Sistem Inventaris Alat Kesehatan</span>
+                    <h1>SIM RS Elektromedis <span class="brand-tag">v2.0</span></h1>
+                    <span>Sistem Manajemen & Inventarisasi Alat Medis</span>
                 </div>
             </a>
             <div class="navbar-user-group">
-                <span class="user-badge" title="Pengguna yang Sedang Login">
+                <span class="user-badge" title="Petugas yang Sedang Login">
                     <i class="fa-solid fa-circle-user"></i>
-                    <?php echo htmlspecialchars(!empty($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : $_SESSION['username']); ?>
+                    <?php echo htmlspecialchars($nama_petugas); ?>
                 </span>
                 <a href="index.php" class="btn btn-secondary btn-sm">
                     <i class="fa-solid fa-arrow-left"></i> Home
                 </a>
-                <a href="logout.php" class="btn btn-action-delete btn-sm" onclick="return confirm('Apakah Anda yakin ingin keluar dari sistem?')" title="Logout">
+                <a href="logout.php" class="btn btn-action-delete btn-sm" onclick="return confirm('Apakah Anda yakin ingin keluar dari sistem?')" title="Keluar">
                     <i class="fa-solid fa-right-from-bracket"></i> Keluar
                 </a>
             </div>
@@ -89,44 +91,47 @@ if (isset($_POST['Submit'])) {
     <main class="container">
         
         <a href="index.php" class="nav-back-link">
-            <i class="fa-solid fa-chevron-left"></i> Kembali ke Daftar Alat
+            <i class="fa-solid fa-chevron-left"></i> Kembali ke Dashboard Inventaris
         </a>
 
-        <div class="form-card">
-            
-            <?php if (!empty($message)): ?>
-                <div class="alert alert-<?php echo $message_type; ?>">
-                    <?php if ($message_type === 'success'): ?>
-                        <i class="fa-solid fa-circle-check" style="font-size: 1.25rem;"></i>
-                    <?php else: ?>
-                        <i class="fa-solid fa-circle-exclamation" style="font-size: 1.25rem;"></i>
-                    <?php endif; ?>
-                    <div><?php echo $message; ?></div>
-                </div>
-            <?php endif; ?>
+        <?php if (!empty($message)): ?>
+            <div class="alert alert-<?php echo $message_type; ?>">
+                <?php if ($message_type === 'success'): ?>
+                    <i class="fa-solid fa-circle-check" style="font-size: 1.35rem;"></i>
+                <?php else: ?>
+                    <i class="fa-solid fa-circle-exclamation" style="font-size: 1.35rem;"></i>
+                <?php endif; ?>
+                <div><?php echo $message; ?></div>
+            </div>
+        <?php endif; ?>
 
+        <div class="form-layout-grid">
+            
+            <!-- Form Input Card -->
             <div class="card">
                 <div class="card-header">
-                    <div>
-                        <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a;">
-                            <i class="fa-solid fa-square-plus" style="color: #2563eb; margin-right: 8px;"></i>
-                            Tambah Data Alat
-                        </h2>
-                        <p style="font-size: 0.85rem; color: #64748b; margin-top: 2px;">
-                            Lengkapi formulir di bawah ini untuk menambahkan data alat baru ke inventaris.
-                        </p>
+                    <div class="card-title-wrap">
+                        <div class="card-title-icon">
+                            <i class="fa-solid fa-circle-plus"></i>
+                        </div>
+                        <div>
+                            <h3>Registrasi Alat Elektromedis Baru</h3>
+                            <p>Lengkapi formulir teknis di bawah ini dengan data yang valid.</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card-body">
-                    <form action="add.php" method="post" name="form1">
+                <div class="card-body" style="padding: 28px;">
+                    <form action="add.php" method="post" name="form1" autocomplete="off">
                         
                         <div class="form-group">
                             <label class="form-label" for="nama_alat">
-                                Nama Alat <span class="required">*</span>
+                                Nama Peralatan Medis <span class="required">*</span>
                             </label>
                             <input type="text" id="nama_alat" name="nama_alat" class="form-control" 
-                                   placeholder="Contoh: USG 4D Doppler, Defibrillator, EKG Monitor" required autofocus>
+                                   placeholder="Contoh: USG 4D Doppler, EKG 12 Lead, Defibrillator" 
+                                   oninput="updatePreview()" required autofocus>
+                            <div class="form-helper">Nama resmi alat medis sesuai dokumen inventaris rumah sakit.</div>
                         </div>
 
                         <div class="form-group">
@@ -134,24 +139,50 @@ if (isset($_POST['Submit'])) {
                                 Tahun Pengadaan <span class="required">*</span>
                             </label>
                             <input type="number" id="tahun" name="tahun" class="form-control" 
-                                   min="1901" max="2155" placeholder="Contoh: 2024" required>
+                                   min="1901" max="2155" placeholder="Contoh: <?php echo date('Y'); ?>" 
+                                   oninput="updatePreview()" required>
                             <div class="form-helper">Rentang tahun pengadaan antara 1901 hingga 2155.</div>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="merek">
-                                Merek / Pabrikan <span class="required">*</span>
+                                Merek / Pabrikan (Vendor) <span class="required">*</span>
                             </label>
-                            <input type="text" id="merek" name="merek" class="form-control" 
-                                   placeholder="Contoh: GE Healthcare, Philips, Mindray, Siemens" required>
+                            <input type="text" id="merek" name="merek" class="form-control" list="list-merek"
+                                   placeholder="Ketik atau pilih vendor alat medis" 
+                                   oninput="updatePreview()" required>
+                            <datalist id="list-merek">
+                                <option value="GE Healthcare"></option>
+                                <option value="Philips Healthcare"></option>
+                                <option value="Mindray"></option>
+                                <option value="Siemens Healthineers"></option>
+                                <option value="Dräger"></option>
+                                <option value="Nihon Kohden"></option>
+                                <option value="Canon Medical Systems"></option>
+                                <option value="Olympus Medical"></option>
+                                <option value="B. Braun"></option>
+                                <option value="Medtronic"></option>
+                            </datalist>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="lokasi">
-                                Lokasi Penempatan <span class="required">*</span>
+                                Lokasi Penempatan / Ruangan RS <span class="required">*</span>
                             </label>
-                            <input type="text" id="lokasi" name="lokasi" class="form-control" 
-                                   placeholder="Contoh: Ruang ICU Lantai 2, Poli Jantung, IGD" required>
+                            <input type="text" id="lokasi" name="lokasi" class="form-control" list="list-lokasi"
+                                   placeholder="Ketik atau pilih ruangan penempatan" 
+                                   oninput="updatePreview()" required>
+                            <datalist id="list-lokasi">
+                                <option value="Ruang ICU (Intensive Care)"></option>
+                                <option value="IGD (Gawat Darurat)"></option>
+                                <option value="Ruang Operasi (OK Sentral)"></option>
+                                <option value="Radiologi & CT Scan"></option>
+                                <option value="Poli Jantung & Kardiovaskular"></option>
+                                <option value="Laboratorium Patologi"></option>
+                                <option value="Ruang Hemodialisa"></option>
+                                <option value="Ruang Rawat Inap Melati Lt. 3"></option>
+                                <option value="Instalasi Pemeliharaan Elektromedis"></option>
+                            </datalist>
                         </div>
 
                         <div class="form-actions">
@@ -167,9 +198,72 @@ if (isset($_POST['Submit'])) {
                 </div>
             </div>
 
+            <!-- Live Asset Tag Preview Card -->
+            <div class="preview-sticky">
+                <div class="asset-tag-card">
+                    <div class="asset-tag-header">
+                        <div>
+                            <div class="asset-tag-title">SIM RS &bull; Asset Tag Preview</div>
+                            <div class="asset-tag-code">#EM-NEW</div>
+                        </div>
+                        <div class="asset-qr-mock" title="Barcode Digital Asset RS">
+                            <i class="fa-solid fa-qrcode"></i>
+                        </div>
+                    </div>
+
+                    <div class="asset-preview-name" id="previewName">
+                        [Nama Alat Medis]
+                    </div>
+
+                    <div class="asset-preview-details">
+                        <div class="preview-detail-item">
+                            <div class="preview-detail-label"><i class="fa-regular fa-calendar"></i> Tahun</div>
+                            <div class="preview-detail-val" id="previewYear">-</div>
+                        </div>
+                        <div class="preview-detail-item">
+                            <div class="preview-detail-label"><i class="fa-solid fa-industry"></i> Merek</div>
+                            <div class="preview-detail-val" id="previewBrand">-</div>
+                        </div>
+                        <div class="preview-detail-item" style="grid-column: span 2;">
+                            <div class="preview-detail-label"><i class="fa-solid fa-location-dot"></i> Lokasi Penempatan</div>
+                            <div class="preview-detail-val" id="previewLocation">-</div>
+                        </div>
+                    </div>
+
+                    <div class="asset-tag-footer">
+                        <span class="asset-status-badge">
+                            <span class="pulse-dot"></span> Status: Siap Digunakan
+                        </span>
+                        <span>Unit Elektromedik RS</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 18px; padding: 16px 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-lg); font-size: 0.85rem; color: #64748b; box-shadow: var(--shadow-subtle);">
+                    <div style="font-weight: 700; color: #0f172a; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-lightbulb" style="color: #f59e0b;"></i> Petunjuk Input
+                    </div>
+                    Kartu di atas menampilkan pratinjau langsung tanda pengenal aset (*Asset Tag*) yang akan tersimpan ke dalam sistem rumah sakit.
+                </div>
+            </div>
+
         </div>
 
     </main>
+
+    <!-- Real-time Preview Script -->
+    <script>
+        function updatePreview() {
+            const nama = document.getElementById('nama_alat').value.trim();
+            const tahun = document.getElementById('tahun').value.trim();
+            const merek = document.getElementById('merek').value.trim();
+            const lokasi = document.getElementById('lokasi').value.trim();
+
+            document.getElementById('previewName').innerText = nama || '[Nama Alat Medis]';
+            document.getElementById('previewYear').innerText = tahun || '-';
+            document.getElementById('previewBrand').innerText = merek || '-';
+            document.getElementById('previewLocation').innerText = lokasi || '-';
+        }
+    </script>
 
 </body>
 </html>

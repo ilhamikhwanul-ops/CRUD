@@ -25,11 +25,11 @@ if (isset($_POST['register'])) {
     } elseif (strlen($username) < 3) {
         $error_message = 'Username minimal harus 3 karakter.';
     } elseif (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
-        $error_message = 'Username hanya boleh berupa huruf, angka, dan garis bawah (_).';
+        $error_message = 'Username hanya boleh berupa kombinasi huruf, angka, dan garis bawah (_).';
     } elseif (strlen($password) < 6) {
-        $error_message = 'Password minimal harus 6 karakter.';
+        $error_message = 'Password minimal harus 6 karakter demi keamanan akun.';
     } elseif ($password !== $confirm_password) {
-        $error_message = 'Konfirmasi password tidak cocok!';
+        $error_message = 'Konfirmasi password tidak sesuai!';
     } else {
         // Cek apakah username sudah digunakan
         $stmt = mysqli_prepare($mysqli, "SELECT id FROM users WHERE username = ?");
@@ -80,7 +80,7 @@ if (isset($_POST['register'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Akun - SIM RS Elektromedis</title>
+    <title>Daftar Petugas Baru - SIM RS Elektromedis</title>
     <!-- Google Font & Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Elegant Theme CSS -->
@@ -89,17 +89,51 @@ if (isset($_POST['register'])) {
 <body>
 
     <div class="auth-wrapper">
-        <div class="auth-card">
+        <div class="auth-split-card">
             
-            <div class="auth-header">
-                <div class="brand-icon">
-                    <i class="fa-solid fa-user-plus"></i>
+            <!-- Left Hero Showcase Side -->
+            <div class="auth-hero-side">
+                <div class="auth-hero-brand">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <h3>SIM RS Elektromedis</h3>
                 </div>
-                <h2>Daftar Akun Baru</h2>
-                <p>Registrasi akun petugas SIM RS Elektromedis</p>
+
+                <div class="auth-hero-main">
+                    <h2>Registrasi Petugas Elektromedik Rumah Sakit</h2>
+                    <p>
+                        Daftarkan akun operator teknisi atau staf elektromedis untuk mengelola data peralatan dan instalasi rumah sakit secara resmi.
+                    </p>
+
+                    <ul class="auth-feature-list">
+                        <li>
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Akses inventaris seluruh ruangan</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Pencatatan pengadaan & vendor alat</span>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Cetak laporan inventaris resmi</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="auth-hero-footer">
+                    &copy; <?php echo date('Y'); ?> SIM RS Elektromedis. All rights reserved.
+                </div>
             </div>
 
-            <div class="auth-body">
+            <!-- Right Form Side -->
+            <div class="auth-form-side">
+                
+                <div class="auth-form-header">
+                    <h3>Registrasi Akun Baru ✨</h3>
+                    <p>Lengkapi formulir di bawah ini untuk membuat akun petugas baru.</p>
+                </div>
 
                 <?php if (!empty($error_message)): ?>
                     <div class="alert alert-danger">
@@ -112,7 +146,7 @@ if (isset($_POST['register'])) {
                     
                     <div class="form-group">
                         <label class="form-label" for="nama_lengkap">
-                            Nama Lengkap <span class="required">*</span>
+                            Nama Lengkap Petugas <span class="required">*</span>
                         </label>
                         <div class="input-icon-group">
                             <input type="text" id="nama_lengkap" name="nama_lengkap" class="form-control" 
@@ -124,7 +158,7 @@ if (isset($_POST['register'])) {
 
                     <div class="form-group">
                         <label class="form-label" for="username">
-                            Username <span class="required">*</span>
+                            Username Akun <span class="required">*</span>
                         </label>
                         <div class="input-icon-group">
                             <input type="text" id="username" name="username" class="form-control" 
@@ -132,7 +166,7 @@ if (isset($_POST['register'])) {
                                    value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>">
                             <i class="fa-solid fa-user input-icon"></i>
                         </div>
-                        <div class="form-helper">Hanya huruf, angka, dan garis bawah (_). Min. 3 karakter.</div>
+                        <div class="form-helper">Huruf, angka, atau underscore (_). Minimal 3 karakter.</div>
                     </div>
 
                     <div class="form-group">
@@ -165,14 +199,14 @@ if (isset($_POST['register'])) {
 
                     <div style="margin-top: 26px;">
                         <button type="submit" name="register" class="btn btn-primary btn-block">
-                            <i class="fa-solid fa-check"></i> Daftarkan Akun
+                            <i class="fa-solid fa-user-plus"></i> Daftarkan Akun Petugas
                         </button>
                     </div>
 
                 </form>
 
                 <div class="auth-footer">
-                    Sudah memiliki akun? <a href="login.php">Masuk di sini</a>
+                    Sudah memiliki akun petugas? <a href="login.php">Masuk di sini</a>
                 </div>
 
             </div>
