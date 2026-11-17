@@ -1,4 +1,6 @@
 <?php
+// Proteksi autentikasi
+include_once("auth.php");
 
 // Menghubungkan ke database
 include_once("config.php");
@@ -15,16 +17,17 @@ if ($id > 0) {
         "DELETE FROM alat WHERE id = ?"
     );
 
-    mysqli_stmt_bind_param($stmt, "i", $id);
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "i", $id);
 
-    // Menjalankan perintah hapus
-    mysqli_stmt_execute($stmt);
+        // Menjalankan perintah hapus
+        mysqli_stmt_execute($stmt);
 
-    mysqli_stmt_close($stmt);
+        mysqli_stmt_close($stmt);
+    }
 }
 
 // Kembali ke halaman utama
 header("Location: index.php");
 exit;
-
 ?>
